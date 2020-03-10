@@ -1,8 +1,7 @@
 import React from 'react';
 import { Grid, Card, CardContent, Typography, Button, Chip, CardMedia } from '@material-ui/core';
-import { FlexLine } from '../../../../components/flex-helpers/index';
-import { PlayArrow, Check, ExitToApp } from '@material-ui/icons';
-import { useHistory, useParams } from 'react-router-dom';
+import { FlexLine } from '../../../components/flex-helpers/index';
+import { ExitToApp } from '@material-ui/icons';
 import { format } from 'date-fns';
 
 export const TurmaGridItem = ({ image, imageAlt, title, dataHoraTermino, instrutor, onItemClicked }) => {

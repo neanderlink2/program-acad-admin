@@ -1,7 +1,7 @@
 import React from 'react';
-import { PlaceholderLoading, PlaceholderContent } from '../styles';
 import { Grid, CardContent, Card } from '@material-ui/core';
-import { FlexLine } from '../../../../components/flex-helpers/index';
+import { PlaceholderLoading, PlaceholderContent } from '../styles';
+import { FlexLine } from '../../flex-helpers';
 
 export const LoadingItem = () => {
     return (

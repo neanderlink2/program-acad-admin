@@ -1,12 +1,8 @@
 import React, { Fragment, useMemo } from 'react';
 import { Grid, Button, ButtonGroup, Typography } from '@material-ui/core';
-
 import { LoadingItem } from './loading-item';
-import { GridItem } from './grid-item/index';
-import { PagedList } from '../../../models/pagedList';
-import { NiveisDificuldadeEnum, ListagemAlgoritmo } from '../../../models/algoritmos';
 
-export const PaginatedGrid = ({ pagedList, isLoading = false, renderItem = (item) => { }, onPageChange = (index) => { } }) => {
+export const PaginatedGrid = ({ pagedList, itemsNotFoundLabel = "Nenhum item foi encontrado...", isLoading = false, renderItem = (item) => { }, onPageChange = (index) => { } }) => {
     const pagination = useMemo(() => {
         if (pagedList) {
             let pagination = [];
@@ -26,17 +22,10 @@ export const PaginatedGrid = ({ pagedList, isLoading = false, renderItem = (item
                     <Fragment><LoadingItem /><LoadingItem /><LoadingItem /></Fragment>
                     :
                     pagedList && pagedList.items.length <= 0 ?
-                        <Typography component="small">Nenhum algoritmo foi encontrada...</Typography>
+                        <Typography component="small">{itemsNotFoundLabel}</Typography>
                         :
                         pagedList && pagedList.items.map((item) => {
                             return renderItem(item);
-                            // return <GridItem key={algoritmo.id}
-                            //     idAlgoritmo={algoritmo.id}
-                            //     descricao={algoritmo.htmlDescricao}
-                            //     linguagensDisponiveis={algoritmo.linguagensDisponiveis}
-                            //     isConcluido={algoritmo.isResolvido}
-                            //     nivelDificuldade={NiveisDificuldadeEnum[algoritmo.idNivelDificuldade]}
-                            //     title={algoritmo.titulo} />
                         })
             }
             <Grid item xs={12} style={{ padding: 10, textAlign: 'right' }}>

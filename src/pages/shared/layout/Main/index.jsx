@@ -12,7 +12,6 @@ const Main = () => {
         <main style={{ marginTop: 50, paddingTop: 30 }}>
             <Switch>
                 {routes.map((route) => {
-                    console.log(user);
                     if (!route.onlyAuthenticated || (route.onlyAuthenticated && user)) {
                         return (
                             <Route key={route.path} exact path={route.path} render={(props) => <route.component {...props} title={route.title} />} />

@@ -14,7 +14,6 @@ const authHandlerSlice = createSlice({
             state.verificouAutenticacao = true;
         },
         removeUser: (state) => {
-            console.log("oi");
             state.user = undefined;
             state.token = '';
             state.verificouAutenticacao = true;

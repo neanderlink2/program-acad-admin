@@ -1,11 +1,12 @@
 import React, { Fragment, useState } from 'react';
-import { Typography, Container } from '@material-ui/core';
+import { Typography, Container, Button, Fab } from '@material-ui/core';
 import { WhiteSection, LogoProgramAcad, CenterSection, SectionText } from './styles';
-import { Section } from './sections';
 import { useDocumentTitle } from '../../components/hooks';
-import { PaginatedGrid } from './paginated-grid';
-import { TurmaGridItem } from './paginated-grid/grid-item';
+import { PaginatedGrid } from '../../components/paginated-grid';
+import { TurmaGridItem } from './grid-item';
 import { useHistory } from 'react-router-dom';
+import { useTurmaPagedGrid } from '../../modules/turmas/hooks';
+import { Add } from '@material-ui/icons';
 
 export const HomeScreen = ({ title }) => {
     const [busca, setBusca] = useState('');
@@ -16,18 +17,23 @@ export const HomeScreen = ({ title }) => {
     const history = useHistory();
 
     useDocumentTitle(title);
+    const { turmas, isLoading } = useTurmaPagedGrid(paginaAtual, busca, ordenacao, direcaoOrdenacao);
 
     const onEntrarClick = (idTurma) => {
-        //escolherTurma(turma.id);
         history.push(`/algoritmos/${idTurma}`);
     };
-
     return (
         <Container>
-            <Typography variant="h5">Minhas turmas</Typography>
+            <Typography variant="h5">
+                Minhas turmas
+                <Fab color="primary" style={{ marginLeft: 10 }} onClick={() => {
+                    history.push(`/turma/cadastro`);
+                }}><Add /></Fab>
+            </Typography>
 
-            <PaginatedGrid isLoading={isBuscandoTurmas}
+            <PaginatedGrid isLoading={isLoading}
                 pagedList={turmas}
+                itemsNotFoundLabel="Nenhuma turma foi encontrada..."
                 onPageChange={(index) => setPaginaAtual(index)}
                 renderItem={(turma) => {
                     return (
@@ -39,7 +45,7 @@ export const HomeScreen = ({ title }) => {
                             dataHoraTermino={turma.dataTermino}
                             title={turma.titulo}
                             onItemClicked={() => {
-                                onEntrarClick(item.id);
+                                onEntrarClick(turma.id);
                             }} />
                     )
                 }}

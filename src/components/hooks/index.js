@@ -43,7 +43,6 @@ export const useUserData = () => {
 
     useEffect(() => {
         if (user) {
-            console.log(user);
             user.getIdTokenResult(true)
                 .then((result) => {
                     setUserClaims(result.claims);

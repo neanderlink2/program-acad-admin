@@ -6,7 +6,8 @@ const api = axios.create({
     baseURL: process.env.NODE_ENV === 'production' ?
         'https://programacadapipresentation20200109114653.azurewebsites.net/api'
         :
-        'https://programacadapipresentation20200109114653.azurewebsites.net/api'
+        'http://localhost:9000/api'
+    //'https://programacadapipresentation20200109114653.azurewebsites.net/api'
 });
 
 api.interceptors.request.use(async config => {

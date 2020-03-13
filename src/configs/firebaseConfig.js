@@ -1,4 +1,5 @@
 import 'firebase/auth';
+import 'firebase/storage';
 import firebase from 'firebase/app';
 import store from './middlewares';
 import { toast } from 'react-toastify';
@@ -17,7 +18,10 @@ const firebaseConfig = {
 
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
+
 const firebaseAppAuth = firebaseApp.auth();
+const firebaseStorage = firebaseApp.storage();
+
 const authenticationProviders = {
     googleProvider: new firebase.auth.GoogleAuthProvider(),
     githubProvider: new firebase.auth.GithubAuthProvider(),
@@ -113,4 +117,16 @@ export const signOut = () => {
 
 export const sendPasswordReset = (email) => {
     return firebaseAppAuth.sendPasswordResetEmail(email);
+}
+
+export const uploadImage = (bucket, filename, file,
+    onUploading = (snapShot) => { }, onError = (err) => { }, onUploadSuccess = (fileUrl) => { }) => {
+
+    const task = firebaseStorage.ref(`${bucket}/${filename}`).put(file);
+    task.on("state_changed", onUploading, onError, () => {
+        firebaseStorage.ref(`${bucket}`).child(filename).getDownloadURL()
+            .then(url => {
+                onUploadSuccess(url);
+            });
+    });
 }

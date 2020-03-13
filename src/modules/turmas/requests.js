@@ -1,10 +1,9 @@
 import { all, call, put, takeLeading } from 'redux-saga/effects';
 import { getTurmasByInstrutorRequest, getTurmasByInstrutorSucesso, getTurmasByInstrutorFalha } from './actions/getTurmasByInstrutor';
-import { getRequest, formatErrors } from '../../api';
-
+import { getRequest, formatErrors, postRequest } from '../../api';
+import { criarTurmaSucesso, criarTurmaFalha, criarTurmaRequest } from './actions/criarTurma';
 
 function* obterTurmasPorInstrutorPaged({ payload }) {
-    
     try {
         const response = yield call(getRequest, `/v1/turmas/instrutor`, payload);
         const { data } = response;
@@ -15,6 +14,27 @@ function* obterTurmasPorInstrutorPaged({ payload }) {
     }
 }
 
+function* criarTurma({ payload }) {
+    const { turma, onSuccess, onFailed } = payload;
+    try {
+        const response = yield call(postRequest, `/v1/turmas`, turma);
+        const { data } = response;
+        yield put(criarTurmaSucesso(data));
+
+        if (onSuccess && typeof onSuccess === "function") {
+            onSuccess();
+        }
+    } catch (error) {
+        console.log(error);
+        yield put(criarTurmaFalha(formatErrors(error)));
+
+        if (onFailed && typeof onFailed === "function") {
+            onFailed(error);
+        }
+    }
+}
+
 export default all([
-    takeLeading(getTurmasByInstrutorRequest.type, obterTurmasPorInstrutorPaged)
+    takeLeading(getTurmasByInstrutorRequest.type, obterTurmasPorInstrutorPaged),
+    takeLeading(criarTurmaRequest.type, criarTurma)
 ]);

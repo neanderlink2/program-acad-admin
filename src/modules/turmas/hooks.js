@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { getTurmasByInstrutorRequest } from "./actions/getTurmasByInstrutor";
+import { criarTurmaRequest } from "./actions/criarTurma";
 
 export const useTurmaPagedGrid = (index, term, ordenacao, direcao) => {
     const dispatch = useDispatch();
@@ -29,4 +30,18 @@ export const useTurmaPagedGrid = (index, term, ordenacao, direcao) => {
     }, [dispatch, index, term, ordenacao, direcao]);
 
     return { turmas, isLoading };
+}
+
+export const useCriacaoTurma = () => {
+    const dispatch = useDispatch();
+
+    const { isRequesting } = useSelector(states => ({
+        ...states.turmas.criar
+    }))
+
+    const cadastrarTurma = useCallback((turma, onSuccess, onFailed) => {
+        dispatch(criarTurmaRequest({ turma, onSuccess, onFailed }));
+    }, [dispatch]);
+
+    return { cadastrarTurma, isRequesting };
 }

@@ -20,14 +20,14 @@ export const HomeScreen = ({ title }) => {
     const { turmas, isLoading } = useTurmaPagedGrid(paginaAtual, busca, ordenacao, direcaoOrdenacao);
 
     const onEntrarClick = (idTurma) => {
-        history.push(`/algoritmos/${idTurma}`);
+        history.push(`/turma/${idTurma}`);
     };
     return (
         <Container>
             <Typography variant="h5">
                 Minhas turmas
                 <Fab color="primary" style={{ marginLeft: 10 }} onClick={() => {
-                    history.push(`/turma/cadastro`);
+                    history.push(`/novaturma`);
                 }}><Add /></Fab>
             </Typography>
 

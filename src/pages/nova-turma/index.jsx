@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { Container, Grid, Fab, Typography, LinearProgress, CircularProgress } from '@material-ui/core';
+import { Container, Grid, Fab, Typography, LinearProgress, CircularProgress, Button } from '@material-ui/core';
 import { Form } from '@unform/web';
-import { Add } from '@material-ui/icons';
+import { Add, ArrowBack } from '@material-ui/icons';
 
 import { ImageUpload } from './image-upload';
 import { InputField } from '../../components/unform/input-field';
@@ -12,9 +12,11 @@ import { useCriacaoTurma } from '../../modules/turmas/hooks';
 import { useUserData } from '../../components/hooks';
 import * as Yup from 'yup';
 import { cadastrarNovaTurma, turmaFormSchema } from './actions';
+import { useHistory } from 'react-router-dom';
 
 export const TurmaForm = () => {
     const formRef = useRef(null);
+    const history = useHistory();
     const [isUploading, setIsUploading] = useState(false);
     const [uploadPercent, setUploadPercent] = useState(0);
 
@@ -61,8 +63,13 @@ export const TurmaForm = () => {
 
                     cadastrarTurma(turma, () => {
                         toast.success("Nova turma criada com sucesso!");
-                    }, () => {
-                        toast.error("Houve um problema durante o cadastro dessa turma.");
+                    }, (error, formatedErrors) => {
+                        console.log(formatedErrors);
+                        if (formatedErrors?.length > 0) {
+                            toast.warn(`Opa, alguma coisa deu errado. Detalhes: ${formatedErrors.join('\n')}`);
+                        } else {
+                            toast.error("Houve um problema durante o cadastro dessa turma.");
+                        }
                     });
                 }
             );
@@ -86,6 +93,7 @@ export const TurmaForm = () => {
 
     return (
         <Container>
+            <Button startIcon={<ArrowBack />} onClick={() => history.goBack()}>Minhas turmas</Button>
             <Typography variant="h4">Crie uma nova turma</Typography>
             <Form ref={formRef} onSubmit={handleSubmit}>
                 <Grid container>

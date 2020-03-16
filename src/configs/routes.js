@@ -1,7 +1,8 @@
 import React, { ComponentType, ElementType } from 'react';
 import { HomeScreen } from '../pages/home'
 import LoginScreen from '../pages/login';
-import { TurmaForm } from '../pages/turma';
+import { TurmaForm } from '../pages/nova-turma';
+import { DetalheTurmaScreen } from '../pages/detalhe-turma';
 
 export const routes = [
     {
@@ -17,7 +18,13 @@ export const routes = [
         onlyAuthenticated: true
     },
     {
-        path: '/turma/cadastro',
+        path: '/turma/:idTurma',
+        component: DetalheTurmaScreen,
+        title: 'Detalhes da turma',
+        onlyAuthenticated: true
+    },
+    {
+        path: '/novaturma',
         component: TurmaForm,
         title: 'Crie uma nova turma',
         onlyAuthenticated: true

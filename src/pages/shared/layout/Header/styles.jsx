@@ -14,5 +14,6 @@ export const TituloTopo = styled(Typography)({
 
 export const BotaoTopo = styled(Button)({
     marginLeft: 10,
-    marginRight: 10
+    marginRight: 10,
+    color: 'white'
 });

@@ -17,7 +17,15 @@ function* obterTurmasPorInstrutorPaged({ payload }) {
 function* criarTurma({ payload }) {
     const { turma, onSuccess, onFailed } = payload;
     try {
-        const response = yield call(postRequest, `/v1/turmas`, turma);
+        const body = {
+            "emailInstrutor": turma.emailInstrutor,
+            "dataCriacao": new Date(),
+            "nomeTurma": turma.nomeTurma,
+            "capacidadeAlunos": parseInt(turma.capacidadeAlunos),
+            "dataHoraTermino": turma.dataHoraTermino,
+            "urlImagem": turma.urlImagem
+        }
+        const response = yield call(postRequest, `/v1/turmas`, body);
         const { data } = response;
         yield put(criarTurmaSucesso(data));
 
@@ -29,7 +37,7 @@ function* criarTurma({ payload }) {
         yield put(criarTurmaFalha(formatErrors(error)));
 
         if (onFailed && typeof onFailed === "function") {
-            onFailed(error);
+            onFailed(error, formatErrors(error));
         }
     }
 }

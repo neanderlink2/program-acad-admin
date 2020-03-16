@@ -16,17 +16,17 @@ export const PlaceholderLoading = styled.div`
   margin: 5px;
   flex: 1;
   overflow: hidden;
-  background: #000;
+  background: #999;
   position: relative;
   animation-duration: 1.7s;
   animation-fill-mode: forwards;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
   animation-name: ${placeholderAnimate};
-  background: #f6f7f8;
-  background: linear-gradient(to right, #424242 2%, #646464 18%, #424242 33%);
+  background: #f0f0f0;
+  background: linear-gradient(to right, #b0b0b0 2%, #c0c0c0 18%, #b0b0b0 33%);
   background-size: 1300px;
-  border-radius: 5px;
+  border-radius: 5px; 
 `;
 
 export const PlaceholderContent = styled.div` 

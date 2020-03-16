@@ -51,19 +51,8 @@ const AuthenticatedMenu = ({ userName, signOut }) => {
 
     return (
         <Fragment>
-            <BotaoTopo variant="text" startIcon={<AccountCircle />} onClick={() => history.push("/conta")}>Prof. {userName}</BotaoTopo>
+            <BotaoTopo variant="text" startIcon={<AccountCircle />} onClick={() => { }}>Prof. {userName}</BotaoTopo>
             <BotaoTopo variant="text" startIcon={<ExitToApp />} onClick={deslogar}>Sair</BotaoTopo>
-            {/*<Menu {...bindMenu(popupState)}>
-                <MenuItem onClick={() => {
-                    popupState.close();
-                    history.push("/conta");
-                }}>Minha conta</MenuItem>
-                <MenuItem onClick={() => {
-                    popupState.close();
-                    history.push("/turmas");
-                }}>Turmas inscritas</MenuItem>
-                <MenuItem onClick={deslogar}>Sair</MenuItem>
-            </Menu>*/}
         </Fragment>
     )
 }

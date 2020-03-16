@@ -2,6 +2,8 @@ import { all, call, put, takeLeading } from 'redux-saga/effects';
 import { getTurmasByInstrutorRequest, getTurmasByInstrutorSucesso, getTurmasByInstrutorFalha } from './actions/getTurmasByInstrutor';
 import { getRequest, formatErrors, postRequest } from '../../api';
 import { criarTurmaSucesso, criarTurmaFalha, criarTurmaRequest } from './actions/criarTurma';
+import { getTurmaByIdSucesso, getTurmaByIdFalha, getTurmaByIdRequest } from './actions/getTurmaById';
+import { getInscritosByTurmaSucesso, getInscritosByTurmaFalha, getInscritosByTurmaRequest } from './actions/getInscritosByTurma';
 
 function* obterTurmasPorInstrutorPaged({ payload }) {
     try {
@@ -42,7 +44,31 @@ function* criarTurma({ payload }) {
     }
 }
 
+function* obterTurmaById({ payload }) {
+    try {
+        const response = yield call(getRequest, `/v1/turmas/${payload}`);
+        const { data } = response;
+        yield put(getTurmaByIdSucesso(data));
+    } catch (error) {
+        console.log(error);
+        yield put(getTurmaByIdFalha(formatErrors(error)));
+    }
+}
+
+function* obterUsuariosInscritos({ payload }) {
+    try {
+        const response = yield call(getRequest, `/v1/turmas/${payload}/inscritos`);
+        const { data } = response;
+        yield put(getInscritosByTurmaSucesso(data));
+    } catch (error) {
+        console.log(error);
+        yield put(getInscritosByTurmaFalha(formatErrors(error)));
+    }
+}
+
 export default all([
     takeLeading(getTurmasByInstrutorRequest.type, obterTurmasPorInstrutorPaged),
+    takeLeading(getTurmaByIdRequest.type, obterTurmaById),
+    takeLeading(getInscritosByTurmaRequest.type, obterUsuariosInscritos),
     takeLeading(criarTurmaRequest.type, criarTurma)
 ]);

@@ -1,0 +1,30 @@
+.descricao-algoritmo-wrapper, .toolbar {
+  background-color: transparent;
+  border-radius: 3px;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  transition: 0.2s;
+}
+
+.descricao-algoritmo-wrapper:focus, .descricao-algoritmo-wrapper:active, .descricao-algoritmo-wrapper:focus-within {
+  border: 2px solid rgba(0, 0, 0, 0.87);
+}
+
+.descricao-algoritmo-wrapper .DraftEditor-root {
+  height: 100%;
+}
+
+.rdw-option-wrapper {
+  transition: 0.4s;
+  background-color: transparent;
+  border-radius: 3px;
+}
+.rdw-option-wrapper:hover,
+.rdw-dropdown-wrapper:hover,
+.rdw-option-active {
+  box-shadow: none;
+}
+
+.rdw-option-active {
+  background-color: #d2d2d2;
+}

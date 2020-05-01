@@ -13,6 +13,7 @@ import { useUserData } from '../../components/hooks';
 import * as Yup from 'yup';
 import { cadastrarNovaTurma, turmaFormSchema } from './actions';
 import { useHistory } from 'react-router-dom';
+import { SubmitButton } from '../../components/unform/submit-button';
 
 export const TurmaForm = () => {
     const formRef = useRef(null);
@@ -142,14 +143,7 @@ export const TurmaForm = () => {
                                     <span>Fazendo upload da imagem...</span>
                                 </>
                                 :
-                                <Fab disabled={isRequesting} variant="extended" style={{ width: '100%' }} color="primary" type="submit">
-                                    {
-                                        isRequesting ?
-                                            <><CircularProgress size={16} style={{ marginRight: 10 }} /> Salvando turma...</>
-                                            :
-                                            <><Add style={{ marginRight: 10 }} /> Cadastrar turma</>
-                                    }
-                                </Fab>
+                                <SubmitButton loading={isRequesting} loadingLabel="Salvando turma...">Cadastrar turma</SubmitButton>
                         }
                     </Grid>
                 </Grid>

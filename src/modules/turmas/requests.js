@@ -1,9 +1,10 @@
 import { all, call, put, takeLeading } from 'redux-saga/effects';
 import { getTurmasByInstrutorRequest, getTurmasByInstrutorSucesso, getTurmasByInstrutorFalha } from './actions/getTurmasByInstrutor';
-import { getRequest, formatErrors, postRequest } from '../../api';
+import { getRequest, formatErrors, postRequest, putRequest } from '../../api';
 import { criarTurmaSucesso, criarTurmaFalha, criarTurmaRequest } from './actions/criarTurma';
 import { getTurmaByIdSucesso, getTurmaByIdFalha, getTurmaByIdRequest } from './actions/getTurmaById';
 import { getInscritosByTurmaSucesso, getInscritosByTurmaFalha, getInscritosByTurmaRequest } from './actions/getInscritosByTurma';
+import { confirmarInscricaoSucesso, confirmarInscricaoFalha, confirmarInscricaoRequest } from './actions/confirmarInscricao';
 
 function* obterTurmasPorInstrutorPaged({ payload }) {
     try {
@@ -66,9 +67,28 @@ function* obterUsuariosInscritos({ payload }) {
     }
 }
 
+function* confirmarInscrito({ payload }) {
+    const { idTurma, emailUsuario, isAceito, onSuccess, onFailed } = payload;
+    try {
+        const response = yield call(putRequest, `/v1/turmas/${idTurma}/acesso`, null, { emailUsuario, isAceito });
+        const { data } = response;
+        yield put(confirmarInscricaoSucesso(data));
+
+        if (onSuccess && typeof onSuccess === "function") {
+            onSuccess();
+        }
+    } catch (error) {
+        yield put(confirmarInscricaoFalha(formatErrors(error)));
+        if (onFailed && typeof onFailed === "function") {
+            onFailed(error);
+        }
+    }
+}
+
 export default all([
     takeLeading(getTurmasByInstrutorRequest.type, obterTurmasPorInstrutorPaged),
     takeLeading(getTurmaByIdRequest.type, obterTurmaById),
     takeLeading(getInscritosByTurmaRequest.type, obterUsuariosInscritos),
-    takeLeading(criarTurmaRequest.type, criarTurma)
+    takeLeading(criarTurmaRequest.type, criarTurma),
+    takeLeading(confirmarInscricaoRequest.type, confirmarInscrito)
 ]);

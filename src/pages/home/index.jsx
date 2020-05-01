@@ -18,7 +18,7 @@ export const HomeScreen = ({ title }) => {
 
     useDocumentTitle(title);
     const { turmas, isLoading } = useTurmaPagedGrid(paginaAtual, busca, ordenacao, direcaoOrdenacao);
-
+    console.log(turmas);
     const onEntrarClick = (idTurma) => {
         history.push(`/turma/${idTurma}`);
     };
@@ -38,12 +38,12 @@ export const HomeScreen = ({ title }) => {
                 renderItem={(turma) => {
                     return (
                         <TurmaGridItem key={turma.id}
-                            image={turma.imagemTurma}
+                            image={turma.urlImagem}
                             imageAlt={turma.titulo}
                             instrutor={turma.nomeInstrutor}
                             isUsuarioInscrito={turma.isUsuarioInscrito}
-                            dataHoraTermino={turma.dataTermino}
-                            title={turma.titulo}
+                            dataHoraTermino={turma.dataHoraTermino}
+                            title={turma.nomeTurma}
                             onItemClicked={() => {
                                 onEntrarClick(turma.id);
                             }} />

@@ -3,6 +3,7 @@ import { HomeScreen } from '../pages/home'
 import LoginScreen from '../pages/login';
 import { TurmaForm } from '../pages/nova-turma';
 import { DetalheTurmaScreen } from '../pages/detalhe-turma';
+import { NovoAlgoritmoScreen } from '../pages/novo-algoritmo';
 
 export const routes = [
     {
@@ -21,6 +22,12 @@ export const routes = [
         path: '/turma/:idTurma',
         component: DetalheTurmaScreen,
         title: 'Detalhes da turma',
+        onlyAuthenticated: true
+    },
+    {
+        path: '/turma/:idTurma/algoritmo',
+        component: NovoAlgoritmoScreen,
+        title: 'Algoritmo',
         onlyAuthenticated: true
     },
     {

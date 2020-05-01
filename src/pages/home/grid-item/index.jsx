@@ -3,10 +3,17 @@ import { Grid, Card, CardContent, Typography, Button, Chip, CardMedia } from '@m
 import { FlexLine } from '../../../components/flex-helpers/index';
 import { ExitToApp } from '@material-ui/icons';
 import { format } from 'date-fns';
+import { useMemo } from 'react';
 
 export const TurmaGridItem = ({ image, imageAlt, title, dataHoraTermino, instrutor, onItemClicked }) => {
-    const date = new Date(dataHoraTermino);
-    const dataFormatada = `${format(date, 'dd/MM/yyyy')} às ${format(date, 'hh:mm')}`;
+    const dataFormatada = useMemo(() => {
+        if (dataHoraTermino) {
+            const date = new Date(dataHoraTermino);
+            return `${format(date, 'dd/MM/yyyy')} às ${format(date, 'hh:mm')}`;
+        }
+        return "";
+    }, [dataHoraTermino]);
+
     return (
         <Grid item xs={12} sm={6} lg={4} style={{ padding: 5 }}>
             <Card>

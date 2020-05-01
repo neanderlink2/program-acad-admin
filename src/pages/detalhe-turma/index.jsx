@@ -6,13 +6,13 @@ import { TabUsuariosInscritos } from './tab-inscritos';
 import { TabDadosTurma } from './tab-dados-turma';
 import { Assignment, People, Class, ArrowBack } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
+import BackButton from '../../components/buttons/BackButton';
 
 export const DetalheTurmaScreen = () => {
     const [tabIndex, setTabIndex] = useState(0);
-    const history = useHistory();
     return (
         <Container>
-            <Button startIcon={<ArrowBack />} onClick={() => history.goBack()}>Voltar</Button>
+            <BackButton route="/" />
             <Tabs value={tabIndex} onChange={(evt, newValue) => setTabIndex(newValue)}>
                 <Tab icon={<Assignment />} label="Algoritmos" {...tabPanelProps(0)} />
                 <Tab icon={<People />} label="Usuários inscritos" {...tabPanelProps(1)} />

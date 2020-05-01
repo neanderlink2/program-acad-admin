@@ -6,7 +6,7 @@ import InputMask from 'react-input-mask';
 export const InputField = ({ name, mask, type, accept = '*', ...rest }) => {
 
     const inputRef = useRef(null);
-    const { fieldName, defaultValue = rest.defaultValue, registerField, error } = useField(name);
+    const { fieldName, defaultValue = rest?.defaultValue, registerField, error } = useField(name);
     useEffect(() => {
         registerField({
             name: fieldName,
@@ -26,6 +26,7 @@ export const InputField = ({ name, mask, type, accept = '*', ...rest }) => {
                         defaultValue={defaultValue}
                         error={Boolean(error)}
                         helperText={error}
+                        variant="outlined"
                         {...rest}
                     />
                 </InputMask>
@@ -39,6 +40,7 @@ export const InputField = ({ name, mask, type, accept = '*', ...rest }) => {
                     defaultValue={defaultValue}
                     error={Boolean(error)}
                     helperText={error}
+                    variant="outlined"
                     {...rest}
                 />
             )

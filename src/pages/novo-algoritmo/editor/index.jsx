@@ -7,6 +7,7 @@ import htmlToDraft from 'html-to-draftjs';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './overrides.css';
 import { useField } from '@unform/core';
+import { Typography } from '@material-ui/core';
 
 export const EditorField = ({ name, initialValue = "<p>Digite a descrição do algoritmo aqui...</p>" }) => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -54,6 +55,7 @@ export const EditorField = ({ name, initialValue = "<p>Digite a descrição do a
                     options: ['inline', 'blockType', 'fontSize', 'textAlign', 'list', 'colorPicker', 'emoji', 'history']
                 }}
             />
+            {error && <Typography variant="caption" style={{ color: "#a81919" }}>{error}</Typography>}
         </>
     )
 }

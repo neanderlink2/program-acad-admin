@@ -1,14 +1,14 @@
+import { Button, Divider, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer } from '@material-ui/core';
+import { AccountCircle, ArrowBack, People, Person } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
-import { SwipeableDrawer, List, ListItem, ListItemIcon, ListItemText, Divider, Button } from '@material-ui/core';
-import { ArrowBack, Person, People, AccountCircle } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
+import { useUserLogin } from '../../../../components/hooks/index';
+import { signOut } from '../../../../configs/firebaseConfig';
 import { useAsideMenu } from '../../../../modules/aside-menu/hooks';
 import { TopAsideMenu } from './styles';
-import { signOut } from '../../../../configs/firebaseConfig'
-import { useHistory } from 'react-router-dom';
-import { useUserData } from '../../../../components/hooks/index';
 
 export const AsideMenu = () => {
-    const { userClaims } = useUserData();
+    const { userClaims } = useUserLogin();
     const history = useHistory();
     const { showingAsideMenu, showMenu, hideMenu } = useAsideMenu();
     const [userName, setUserName] = useState('');

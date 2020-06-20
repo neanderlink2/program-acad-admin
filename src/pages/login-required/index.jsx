@@ -1,8 +1,7 @@
+import { Button, Card, CardContent, Container, Typography } from '@material-ui/core';
 import React from 'react';
-import { Container, CardContent, Card, Typography, Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import { useDocumentTitle, useUserData } from '../../components/hooks';
-import { LoadingScreen } from '../../components/loading';
+import { useDocumentTitle } from '../../components/hooks';
 
 export const LoginRequiredScreen = ({ title }) => {
     useDocumentTitle(title);

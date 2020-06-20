@@ -1,10 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useMemo } from "react";
-import { getAlgoritmosRequest } from "./actions/getAlgoritmos";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { createAlgoritmoRequest } from "./actions/createAlgoritmo";
+import { editAlgoritmoRequest } from "./actions/editAlgoritmo";
+import { getAlgoritmoPorIdRequest, getAlgoritmoPorIdSucesso } from "./actions/getAlgoritmoPorId";
+import { getAlgoritmosRequest } from "./actions/getAlgoritmos";
 import { getLinguagensDisponiveisRequest } from "./actions/getLinguagensDisponiveis";
 import { getNiveisDificuldadeRequest } from "./actions/getNiveisDificuldade";
+import { getTestesPorAlgoritmoRequest } from "./actions/getTestesPorAlgoritmo";
 
 export const useAlgoritmosPagedGrid = (index, term, ordenacao, direcao) => {
     const dispatch = useDispatch();
@@ -41,13 +44,18 @@ export const useAlgoritmosPagedGrid = (index, term, ordenacao, direcao) => {
 export const useCriarAlgoritmo = () => {
     const dispatch = useDispatch();
     const { isLoading } = useSelector(states => ({
-        isLoading: states.algoritmos.create.isRequesting
+        isLoading: states.algoritmos.create.isRequesting || states.algoritmos.edit.isRequesting
     }));
     const criarAlgoritmo = useCallback((data, onSuccess, onFailed) => {
         dispatch(createAlgoritmoRequest({ data, onSuccess, onFailed }));
     }, [dispatch]);
 
-    return { isLoading, criarAlgoritmo };
+    const editarAlgoritmo = useCallback((idAlgoritmo, data, onSuccess, onFailed) => {
+        data.id = idAlgoritmo;
+        dispatch(editAlgoritmoRequest({ data, onSuccess, onFailed }));
+    }, [dispatch]);
+
+    return { isLoading, criarAlgoritmo, editarAlgoritmo };
 }
 
 export const useAllLinguagensProgramacao = () => {
@@ -87,4 +95,38 @@ export const useSelectNiveisDificuldade = () => {
     }))), [niveis]);
 
     return [select, isLoading];
+}
+
+export const useAlgoritmoPorId = () => {
+    const dispatch = useDispatch();
+
+    const { algoritmo, isLoading } = useSelector(state => ({
+        algoritmo: state.algoritmos.unique.successPayload,
+        isLoading: state.algoritmos.unique.isRequesting
+    }));
+
+    const buscarAlgoritmoPorId = useCallback((idAlgoritmo) => {
+        dispatch(getAlgoritmoPorIdRequest(idAlgoritmo));
+    }, [dispatch]);
+
+    const limparAlgoritmo = useCallback(() => {
+        dispatch(getAlgoritmoPorIdSucesso(undefined));
+    }, [dispatch]);
+
+    return [algoritmo, isLoading, buscarAlgoritmoPorId, limparAlgoritmo];
+}
+
+export const useTestesPorAlgoritmo = () => {
+    const dispatch = useDispatch();
+
+    const { testes, isLoading } = useSelector(state => ({
+        testes: state.algoritmos.testes.successPayload,
+        isLoading: state.algoritmos.testes.isRequesting
+    }));
+
+    const buscarTestes = useCallback((idAlgoritmo) => {
+        dispatch(getTestesPorAlgoritmoRequest(idAlgoritmo));
+    }, [dispatch]);
+
+    return [testes, isLoading, buscarTestes];
 }

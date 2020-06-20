@@ -1,10 +1,11 @@
-import { useEffect, useCallback } from "react"
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTurmasByInstrutorRequest } from "./actions/getTurmasByInstrutor";
-import { criarTurmaRequest } from "./actions/criarTurma";
-import { getInscritosByTurmaRequest } from "./actions/getInscritosByTurma";
 import { confirmarInscricaoRequest } from "./actions/confirmarInscricao";
-import { getTurmaByIdRequest } from "./actions/getTurmaById";
+import { criarTurmaRequest } from "./actions/criarTurma";
+import { editarTurmaRequest } from "./actions/editarTurma";
+import { getInscritosByTurmaRequest } from "./actions/getInscritosByTurma";
+import { getTurmaByIdRequest, getTurmaByIdSucesso } from "./actions/getTurmaById";
+import { getTurmasByInstrutorRequest } from "./actions/getTurmasByInstrutor";
 
 export const useTurmaPagedGrid = (index, term, ordenacao, direcao) => {
     const dispatch = useDispatch();
@@ -38,15 +39,19 @@ export const useTurmaPagedGrid = (index, term, ordenacao, direcao) => {
 export const useCriacaoTurma = () => {
     const dispatch = useDispatch();
 
-    const { isRequesting } = useSelector(states => ({
-        ...states.turmas.criar
+    const { isLoading } = useSelector(states => ({
+        isLoading: states.turmas.criar.isRequesting || states.turmas.editar.isRequesting
     }))
 
     const cadastrarTurma = useCallback((turma, onSuccess, onFailed) => {
         dispatch(criarTurmaRequest({ turma, onSuccess, onFailed }));
     }, [dispatch]);
 
-    return { cadastrarTurma, isRequesting };
+    const editarTurma = useCallback((idTurma, turma, onSuccess, onFailed) => {
+        dispatch(editarTurmaRequest({ idTurma, turma, onSuccess, onFailed }));
+    }, [dispatch]);
+
+    return { cadastrarTurma, editarTurma, isLoading };
 }
 
 export const useUsuariosInscritos = (idTurma) => {
@@ -88,5 +93,9 @@ export const useTurmaById = () => {
         dispatch(getTurmaByIdRequest(idTurma));
     }, [dispatch]);
 
-    return { getTurma, turma, isLoading };
+    const limparTurma = useCallback(() => {
+        dispatch(getTurmaByIdSucesso(undefined));
+    })
+
+    return { getTurma, limparTurma,  turma, isLoading };
 }

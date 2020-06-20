@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { updateUser } from '../../configs/firebaseConfig';
 import { storeUser } from '../../modules/account/actions/authHandler';
 
 export const useDocumentTitle = (title) => {
@@ -34,7 +33,7 @@ export const useSnackbars = () => {
     }
 }
 
-export const useUserData = () => {
+export const useUserLogin = () => {
     const user = useSelector((states) => states.account.auth.user);
 
     const [userClaims, setUserClaims] = useState(null);
@@ -64,6 +63,7 @@ export const useUserData = () => {
 
     return { userClaims, user, token, isPrimeiroAcesso, atualizarUsuario };
 }
+
 export const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 }

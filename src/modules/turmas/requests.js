@@ -1,10 +1,11 @@
 import { all, call, put, takeLeading } from 'redux-saga/effects';
-import { getTurmasByInstrutorRequest, getTurmasByInstrutorSucesso, getTurmasByInstrutorFalha } from './actions/getTurmasByInstrutor';
-import { getRequest, formatErrors, postRequest, putRequest } from '../../api';
-import { criarTurmaSucesso, criarTurmaFalha, criarTurmaRequest } from './actions/criarTurma';
-import { getTurmaByIdSucesso, getTurmaByIdFalha, getTurmaByIdRequest } from './actions/getTurmaById';
-import { getInscritosByTurmaSucesso, getInscritosByTurmaFalha, getInscritosByTurmaRequest } from './actions/getInscritosByTurma';
-import { confirmarInscricaoSucesso, confirmarInscricaoFalha, confirmarInscricaoRequest } from './actions/confirmarInscricao';
+import { formatErrors, getRequest, postRequest, putRequest } from '../../api';
+import { confirmarInscricaoFalha, confirmarInscricaoRequest, confirmarInscricaoSucesso } from './actions/confirmarInscricao';
+import { criarTurmaFalha, criarTurmaRequest, criarTurmaSucesso } from './actions/criarTurma';
+import { editarTurmaFalha, editarTurmaRequest, editarTurmaSucesso } from './actions/editarTurma';
+import { getInscritosByTurmaFalha, getInscritosByTurmaRequest, getInscritosByTurmaSucesso } from './actions/getInscritosByTurma';
+import { getTurmaByIdFalha, getTurmaByIdRequest, getTurmaByIdSucesso } from './actions/getTurmaById';
+import { getTurmasByInstrutorFalha, getTurmasByInstrutorRequest, getTurmasByInstrutorSucesso } from './actions/getTurmasByInstrutor';
 
 function* obterTurmasPorInstrutorPaged({ payload }) {
     try {
@@ -38,6 +39,32 @@ function* criarTurma({ payload }) {
     } catch (error) {
         console.log(error);
         yield put(criarTurmaFalha(formatErrors(error)));
+
+        if (onFailed && typeof onFailed === "function") {
+            onFailed(error, formatErrors(error));
+        }
+    }
+}
+
+function* editarTurma({ payload }) {
+    const { idTurma, turma, onSuccess, onFailed } = payload;
+    try {
+        const body = {
+            "id": idTurma,
+            "nomeTurma": turma.nomeTurma,
+            "capacidadeAlunos": parseInt(turma.capacidadeAlunos),
+            "dataHoraTermino": turma.dataHoraTermino,
+            "urlImagem": turma.urlImagem
+        }
+        const response = yield call(putRequest, `/v1/turmas`, body);
+        const { data } = response;
+        yield put(editarTurmaSucesso(data));
+
+        if (onSuccess && typeof onSuccess === "function") {
+            onSuccess();
+        }
+    } catch (error) {
+        yield put(editarTurmaFalha(formatErrors(error)));
 
         if (onFailed && typeof onFailed === "function") {
             onFailed(error, formatErrors(error));
@@ -90,5 +117,6 @@ export default all([
     takeLeading(getTurmaByIdRequest.type, obterTurmaById),
     takeLeading(getInscritosByTurmaRequest.type, obterUsuariosInscritos),
     takeLeading(criarTurmaRequest.type, criarTurma),
-    takeLeading(confirmarInscricaoRequest.type, confirmarInscrito)
+    takeLeading(confirmarInscricaoRequest.type, confirmarInscrito),
+    takeLeading(editarTurmaRequest.type, editarTurma)
 ]);

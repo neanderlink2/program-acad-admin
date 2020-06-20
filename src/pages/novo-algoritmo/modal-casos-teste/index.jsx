@@ -116,7 +116,7 @@ export const ModalCasosTeste = ({ toggleButton = () => <></>, onSubmit = (data) 
                 <DialogActions>
                     <Button onClick={toggleModal} color="primary">
                         Voltar
-                        </Button>
+                    </Button>
                     <Button onClick={() => {
                         onSubmit({ entradaEsperada: allEntradas, saidaEsperada: allSaidas, tempoMaximoExecucao: tempoExecucao });
                         setEntrada('');

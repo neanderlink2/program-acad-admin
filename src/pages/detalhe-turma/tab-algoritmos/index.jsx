@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { PaginatedGrid } from '../../../components/paginated-grid';
-import { AlgoritmoGridItem } from './grid-item';
-import { FlexLine } from '../../../components/flex-helpers';
-import { useParams, useHistory } from 'react-router-dom';
 import { Fab } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
+import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { FlexLine } from '../../../components/flex-helpers';
+import { PaginatedGrid } from '../../../components/paginated-grid';
 import { useAlgoritmosPagedGrid } from '../../../modules/algoritmos/hooks';
+import { AlgoritmoGridItem } from './grid-item';
 
 export const TabAlgoritmos = () => {
     const history = useHistory();
@@ -29,19 +29,17 @@ export const TabAlgoritmos = () => {
                 pagedList={algoritmos}
                 itemsNotFoundLabel="Nenhum algoritmo foi encontrado..."
                 onPageChange={(index) => setPaginaAtual(index)}
-                renderItem={(algoritmo) => {
-                    return (
-                        <AlgoritmoGridItem key={algoritmo.id}
-                            descricao={algoritmo.htmlDescricao}
-                            linguagensDisponiveis={algoritmo.linguagensDisponiveis}
-                            nivelDificuldade={algoritmo.nivelDificuldade}
-                            title={algoritmo.titulo}
-                            onEditClick={() => {
-                                console.log("Algoritmo clicado.");
-                            }}
-                        />
-                    )
-                }}
+                renderItem={(algoritmo) => (
+                    <AlgoritmoGridItem key={algoritmo.id}
+                        descricao={algoritmo.htmlDescricao}
+                        linguagensDisponiveis={algoritmo.linguagensDisponiveis}
+                        nivelDificuldade={algoritmo.nivelDificuldade}
+                        title={algoritmo.titulo}
+                        onEditClick={() => {
+                            history.push(`/turma/${idTurma}/algoritmo/${algoritmo.id}`);
+                        }}
+                    />
+                )}
             />
         </>
     );

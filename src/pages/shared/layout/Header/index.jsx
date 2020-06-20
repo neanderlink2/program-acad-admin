@@ -1,17 +1,17 @@
+import { AppBar, IconButton, Toolbar } from '@material-ui/core';
+import { AccountCircle, ExitToApp, Menu as MenuIcon } from '@material-ui/icons';
+import { usePopupState } from 'material-ui-popup-state/hooks';
 import React, { Fragment } from 'react';
-import { AppBar, Toolbar, IconButton, Menu, MenuItem } from '@material-ui/core';
-import { Menu as MenuIcon, AccountCircle, Assignment, People, ExitToApp } from '@material-ui/icons';
-import { BotaoTopo, TituloTopo } from './styles';
-import { bindTrigger, bindMenu, usePopupState } from 'material-ui-popup-state/hooks';
 import { useHistory } from 'react-router-dom';
-import { useUserData } from '../../../../components/hooks/index';
+import { useUserLogin } from '../../../../components/hooks/index';
 import { signOut } from '../../../../configs/firebaseConfig';
-import { useWindowWidth } from './hooks';
 import { useAsideMenu } from '../../../../modules/aside-menu/hooks';
+import { useWindowWidth } from './hooks';
+import { BotaoTopo, TituloTopo } from './styles';
 
 const Header = () => {
     const history = useHistory();
-    const { user, userClaims } = useUserData();
+    const { user, userClaims } = useUserLogin();
     const width = useWindowWidth();
     const { showMenu } = useAsideMenu();
     return (

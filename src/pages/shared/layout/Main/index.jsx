@@ -1,13 +1,11 @@
 import React from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { useUserLogin } from '../../../../components/hooks';
 import { routes } from '../../../../configs/routes';
-import { LoginRequiredScreen } from '../../../login-required';
-import { useUserData } from '../../../../components/hooks';
-import LoginScreen from '../../../login';
 import { NotFoundScreen } from '../../../not-found';
 
 const Main = () => {
-    const { user, userClaims } = useUserData();
+    const { user, userClaims } = useUserLogin();
     return (
         <main style={{ marginTop: 50, paddingTop: 30 }}>
             <Switch>

@@ -1,9 +1,9 @@
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/storage';
-import firebase from 'firebase/app';
-import store from './middlewares';
 import { toast } from 'react-toastify';
-import { storeUser, removeUser } from '../modules/account/actions/authHandler';
+import { removeUser, storeUser } from '../modules/account/actions/authHandler';
+import store from './middlewares';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDUlqW3Y4a0Gaz2TNgYQrEmS5PT6-4qLNY",
@@ -58,13 +58,11 @@ const handleAuthError = (code) => {
         case firebaseErrorCodes.INVALID_EMAIL:
             toast.warn("E-mail está em um formato inválido.");
             return;
+        case firebaseErrorCodes.WRONG_PASSWORD:
         case firebaseErrorCodes.NOT_FOUND:
             toast.warn("E-mail ou senha estão incorretos.");
             return;
         case firebaseErrorCodes.POPUP_CLOSED:
-            return;
-        case firebaseErrorCodes.WRONG_PASSWORD:
-            toast.warn("E-mail ou senha estão incorretos.");
             return;
     }
 }

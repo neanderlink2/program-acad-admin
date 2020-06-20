@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const getTurmaByIdSlice = createSlice({
-    name: 'turmas',
+const editAlgoritmoSlice = createSlice({
+    name: 'algoritmos',
     initialState: {
         isRequesting: false,
         hasFinished: false,
@@ -9,17 +9,17 @@ const getTurmaByIdSlice = createSlice({
         errors: []
     },
     reducers: {
-        getTurmaByIdRequest: (state) => {
+        editAlgoritmoRequest: (state) => {
             state.isRequesting = true;
             state.hasFinished = false;
         },
-        getTurmaByIdSucesso: (state, action) => {
+        editAlgoritmoSucesso: (state, action) => {
             state.isRequesting = false;
             state.hasFinished = true;
             state.successPayload = action.payload;
             state.errors = [];
         },
-        getTurmaByIdFalha: (state, action) => {
+        editAlgoritmoFalha: (state, action) => {
             state.isRequesting = false;
             state.hasFinished = true;
             state.successPayload = undefined;
@@ -28,5 +28,9 @@ const getTurmaByIdSlice = createSlice({
     }
 });
 
-export const { getTurmaByIdFalha, getTurmaByIdRequest, getTurmaByIdSucesso } = getTurmaByIdSlice.actions;
-export default getTurmaByIdSlice.reducer;
+export const {
+    editAlgoritmoFalha,
+    editAlgoritmoRequest,
+    editAlgoritmoSucesso
+} = editAlgoritmoSlice.actions;
+export default editAlgoritmoSlice.reducer;

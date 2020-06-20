@@ -4,9 +4,8 @@ import { LoadingScreen } from '../loading';
 
 
 export const LoadingData = ({ message }) => (
-    <InlineContainer style={{ justifyContent: 'center' }}>
+    <InlineContainer style={{ justifyContent: 'center', flexDirection: 'column' }}>
         <LoadingScreen />
         {message && <span>{message}</span>}
-
     </InlineContainer>
 )

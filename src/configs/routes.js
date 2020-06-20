@@ -1,8 +1,7 @@
-import React, { ComponentType, ElementType } from 'react';
-import { HomeScreen } from '../pages/home'
+import { DetalheTurmaScreen } from '../pages/detalhe-turma';
+import { HomeScreen } from '../pages/home';
 import LoginScreen from '../pages/login';
 import { TurmaForm } from '../pages/nova-turma';
-import { DetalheTurmaScreen } from '../pages/detalhe-turma';
 import { NovoAlgoritmoScreen } from '../pages/novo-algoritmo';
 
 export const routes = [
@@ -31,9 +30,21 @@ export const routes = [
         onlyAuthenticated: true
     },
     {
+        path: '/turma/:idTurma/algoritmo/:idAlgoritmo',
+        component: NovoAlgoritmoScreen,
+        title: 'Algoritmo',
+        onlyAuthenticated: true
+    },
+    {
         path: '/novaturma',
         component: TurmaForm,
         title: 'Crie uma nova turma',
+        onlyAuthenticated: true
+    },
+    {
+        path: '/turma/:idTurma/edicao',
+        component: TurmaForm,
+        title: 'Dados da Turma',
         onlyAuthenticated: true
     }
 ];

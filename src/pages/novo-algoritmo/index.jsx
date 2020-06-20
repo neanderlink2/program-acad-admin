@@ -1,27 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Grid, Typography, Button, Fab, Chip } from '@material-ui/core';
+import { Chip, CircularProgress, Container, Fab, Grid, Typography } from '@material-ui/core';
+import { Add, Delete, Edit } from '@material-ui/icons';
+import { Scope } from '@unform/core';
 import { Form } from '@unform/web';
-import { useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import * as Yup from 'yup';
+import BackButton from '../../components/buttons/BackButton';
+import { LoadingData } from '../../components/loading-data';
+import { CheckBoxField } from '../../components/unform/checkboxes';
 import { InputField } from '../../components/unform/input-field';
 import { NivelDificuldadeSelect } from '../../components/unform/select-field/nivel-dificuldade-select';
-import { CheckBoxField } from '../../components/unform/checkboxes';
-import { useParams, useHistory } from 'react-router-dom';
-import { useTurmaById } from '../../modules/turmas/hooks';
-import { LoadingData } from '../../components/loading-data';
-import BackButton from '../../components/buttons/BackButton';
-import { Scope } from '@unform/core';
-import { EditorField } from './editor';
 import { SubmitButton } from '../../components/unform/submit-button';
+import { useAlgoritmoPorId, useAllLinguagensProgramacao, useCriarAlgoritmo, useTestesPorAlgoritmo } from '../../modules/algoritmos/hooks';
+import { useTurmaById } from '../../modules/turmas/hooks';
+import { EditorField } from './editor';
 import { ModalCasosTeste } from './modal-casos-teste';
-import { Add, Delete, Settings } from '@material-ui/icons';
-import { TesteChipLabel } from './teste-chip-label';
-import { useCriarAlgoritmo, useAllLinguagensProgramacao } from '../../modules/algoritmos/hooks';
-import * as Yup from 'yup';
 import { algoritmoFormSchema } from './schema';
-import { toast } from 'react-toastify';
+import { TesteChipLabel } from './teste-chip-label';
 
 export const NovoAlgoritmoScreen = () => {
-    const { idTurma } = useParams();
+    const { idTurma, idAlgoritmo } = useParams();
     const history = useHistory();
     const { turma, isLoading, getTurma } = useTurmaById();
     const formRef = useRef(null);
@@ -29,7 +28,12 @@ export const NovoAlgoritmoScreen = () => {
     const [casosTeste, setCasosTeste] = useState([]);
     const [linguagens, isLoadingLinguagens] = useAllLinguagensProgramacao();
 
-    const { isLoading: isCreatingAlgoritmo, criarAlgoritmo } = useCriarAlgoritmo();
+    const { isLoading: isCreatingAlgoritmo, criarAlgoritmo, editarAlgoritmo } = useCriarAlgoritmo();
+    const [algoritmo, isLoadingAlgoritmo, buscarAlgoritmo, limparAlgoritmo] = useAlgoritmoPorId();
+    const [casosTesteAlgoritmo, isLoadingTestes, buscarTestes] = useTestesPorAlgoritmo();
+    const editandoAlgoritmo = useMemo(
+        () => !!idAlgoritmo,
+        [idAlgoritmo]);
 
     useEffect(() => {
         if (idTurma) {
@@ -37,11 +41,25 @@ export const NovoAlgoritmoScreen = () => {
         }
     }, [idTurma]);
 
+    useEffect(() => {
+        if (idAlgoritmo) {
+            buscarAlgoritmo(idAlgoritmo);
+            buscarTestes(idAlgoritmo);
+        } else {
+            limparAlgoritmo();
+        }
+    }, [idAlgoritmo]);
+
+    useEffect(() => {
+        if (casosTesteAlgoritmo) {
+            setCasosTeste(casosTesteAlgoritmo)
+        }
+    }, [casosTesteAlgoritmo]);
+
     async function handleSubmit(data) {
         try {
             formRef.current.setErrors({});
             data.idTurma = idTurma;
-            data.dataCriacao = new Date();
             data.nivelDificuldade = parseInt(data.nivelDificuldade);
             data.linguagensPermitidas = Object.keys(data.linguagens).filter(key => data.linguagens[key]);
             data.casosTeste = casosTeste;
@@ -51,10 +69,19 @@ export const NovoAlgoritmoScreen = () => {
                 await algoritmoFormSchema.validate(data, { abortEarly: false });
             }
 
-            criarAlgoritmo(data, () => {
-                toast.success("Algoritmo publicado com sucesso!");
-                history.push(`/turma/${idTurma}`);
-            })
+            if (editandoAlgoritmo) {
+                editarAlgoritmo(idAlgoritmo, data, () => {
+                    toast.success("Informações atualizadas com sucesso!");
+                    history.push(`/turma/${idTurma}`);
+                });
+            } else {
+                data.dataCriacao = new Date();
+                criarAlgoritmo(data, () => {
+                    toast.success("Algoritmo publicado com sucesso!");
+                    history.push(`/turma/${idTurma}`);
+                });
+            }
+
         } catch (err) {
             const validationErrors = {};
             if (err instanceof Yup.ValidationError) {
@@ -69,10 +96,10 @@ export const NovoAlgoritmoScreen = () => {
         }
     }
 
-    if (isLoading) {
+    if (isLoading || isLoadingAlgoritmo) {
         return (
             <LoadingData
-                message="Buscando dados da turma..."
+                message={`Buscando dados da ${isLoadingAlgoritmo ? 'atividade...' : 'turma...'}`}
             />
         )
     }
@@ -82,7 +109,10 @@ export const NovoAlgoritmoScreen = () => {
             <BackButton
                 route={`/turma/${idTurma}`}
             />
-            <Typography variant="body1">Adicionando algoritmo para a turma <Typography variant="h4">{turma.nomeTurma}</Typography></Typography>
+            <Typography variant="body1">
+                {editandoAlgoritmo ? 'Editando ' : 'Adicionando '}
+                algoritmo para a turma <Typography variant="h4">{turma?.nomeTurma}</Typography>
+            </Typography>
             <Form ref={formRef} onSubmit={handleSubmit}>
                 <Grid container>
                     <Grid item xs={12}>
@@ -94,6 +124,7 @@ export const NovoAlgoritmoScreen = () => {
                             name="titulo"
                             fullWidth
                             margin="normal"
+                            defaultValue={algoritmo?.titulo}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6} style={{ paddingLeft: 10 }}>
@@ -102,6 +133,7 @@ export const NovoAlgoritmoScreen = () => {
                             name="nivelDificuldade"
                             fullWidth
                             margin="normal"
+                            defaultValue={algoritmo?.idNivelDificuldade}
                         />
                     </Grid>
                 </Grid>
@@ -116,7 +148,7 @@ export const NovoAlgoritmoScreen = () => {
                                     <CheckBoxField
                                         name={ling.apiIdentifier}
                                         label={ling.name}
-                                        defaultValue={true}
+                                        defaultValue={!!algoritmo?.linguagensDisponiveis.includes(ling.apiIdentifier) ?? true}
                                     />
                                 ))
                             }
@@ -127,6 +159,7 @@ export const NovoAlgoritmoScreen = () => {
                     <Grid item xs={12}>
                         <EditorField
                             name="htmlDescricao"
+                            initialValue={algoritmo?.htmlDescricao}
                         />
                     </Grid>
                 </Grid>
@@ -139,23 +172,32 @@ export const NovoAlgoritmoScreen = () => {
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        {casosTeste.map((teste, i) => (
-                            <Chip key={`teste-${i}`}
-                                label={<TesteChipLabel
-                                    entradas={teste.entradaEsperada}
-                                    saidas={teste.saidaEsperada}
-                                    tempoExecucao={teste.tempoMaximoExecucao}
-                                />}
-                                style={{ margin: 10 }}
-                                deleteIcon={<Delete />}
-                                onDelete={() => setCasosTeste(casosTeste.filter((_, index) => index !== i))}
-                            />
-                        ))}
+                        {isLoadingTestes ?
+                            <CircularProgress />
+                            :
+                            casosTeste.map((teste, i) => (
+                                <Chip key={`teste-${i}`}
+                                    label={<TesteChipLabel
+                                        entradas={teste.entradaEsperada}
+                                        saidas={teste.saidaEsperada}
+                                        tempoExecucao={teste.tempoMaximoExecucao}
+                                    />}
+                                    style={{ margin: 10 }}
+                                    deleteIcon={<Delete />}
+                                    onDelete={() => setCasosTeste(casosTeste.filter((_, index) => index !== i))}
+                                />
+                            ))}
                     </Grid>
                 </Grid>
                 <Grid container>
                     <Grid item xs={12}>
-                        <SubmitButton loading={isCreatingAlgoritmo} loadingLabel="Salvando algoritmo...">Publicar algoritmo</SubmitButton>
+                        <SubmitButton
+                            loading={isCreatingAlgoritmo}
+                            icon={editandoAlgoritmo ? <Edit style={{ marginRight: 10 }} /> : <Add style={{ marginRight: 10 }} />}
+                            loadingLabel="Salvando..."
+                        >
+                            {editandoAlgoritmo ? 'Salvar alterações' : 'Publicar algoritmo'}
+                        </SubmitButton>
                     </Grid>
                 </Grid>
             </Form>

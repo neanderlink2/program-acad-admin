@@ -1,32 +1,36 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const getTurmaByIdSlice = createSlice({
-    name: 'turmas',
+const getAlgoritmoPorIdSlice = createSlice({
+    name: 'algoritmos',
     initialState: {
         isRequesting: false,
         hasFinished: false,
-        successPayload: undefined,
+        successPayload: [],
         errors: []
     },
     reducers: {
-        getTurmaByIdRequest: (state) => {
+        getAlgoritmoPorIdRequest: (state) => {
             state.isRequesting = true;
             state.hasFinished = false;
         },
-        getTurmaByIdSucesso: (state, action) => {
+        getAlgoritmoPorIdSucesso: (state, action) => {
             state.isRequesting = false;
             state.hasFinished = true;
             state.successPayload = action.payload;
             state.errors = [];
         },
-        getTurmaByIdFalha: (state, action) => {
+        getAlgoritmoPorIdFalha: (state, action) => {
             state.isRequesting = false;
             state.hasFinished = true;
-            state.successPayload = undefined;
+            state.successPayload = [];
             state.errors = action.payload;
         },
     }
 });
 
-export const { getTurmaByIdFalha, getTurmaByIdRequest, getTurmaByIdSucesso } = getTurmaByIdSlice.actions;
-export default getTurmaByIdSlice.reducer;
+export const {
+    getAlgoritmoPorIdFalha,
+    getAlgoritmoPorIdRequest,
+    getAlgoritmoPorIdSucesso
+} = getAlgoritmoPorIdSlice.actions;
+export default getAlgoritmoPorIdSlice.reducer;

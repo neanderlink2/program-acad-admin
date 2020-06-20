@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Card, CardContent, Typography, TextField, Button } from '@material-ui/core';
-import { useDocumentTitle, useUserData } from '../../components/hooks';
+import { Button, Card, CardContent, Container, TextField, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { FlexEnd, FlexLine } from '../../components/flex-helpers/index';
+import { useDocumentTitle, useUserLogin } from '../../components/hooks';
+import { PasswordField } from '../../components/password-field';
+import { FacebookButton } from '../../components/signin-buttons/facebook-button';
 import { GitHubButton } from '../../components/signin-buttons/github-button';
 import { GoogleButton } from '../../components/signin-buttons/google-button';
-import { FacebookButton } from '../../components/signin-buttons/facebook-button';
-import { PasswordField } from '../../components/password-field';
 import { SimpleButton } from '../../components/signin-buttons/simple-button';
+import { signInWithFacebook, signInWithGithub, signInWithGoogle, signInWithSimple } from '../../configs/firebaseConfig';
 import { useUserLoginFailed, useUserLoginSuccess } from './hooks';
-import { FlexEnd, FlexLine } from '../../components/flex-helpers/index';
-import { signInWithSimple, signInWithFacebook, signInWithGoogle, signInWithGithub } from '../../configs/firebaseConfig';
 import { ModalResetPassword } from './modal-confirm-reset-password';
-import { useHistory, Redirect } from 'react-router-dom';
 
 const LoginScreen = ({ title, user, error }) => {
     const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ const LoginScreen = ({ title, user, error }) => {
     const [loginResult, setLoginResult] = useState(undefined);
     const [showModal, setShowModal] = useState(false);
 
-    const { user: userFirebase } = useUserData();
+    const { user: userFirebase } = useUserLogin();
     useDocumentTitle(title);
     useUserLoginFailed(errorCode, () => {
         setErrorCode(undefined)

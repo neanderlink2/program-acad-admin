@@ -1,16 +1,18 @@
 import { combineReducers } from 'redux';
-
-import getTurmasByInstrutor from './actions/getTurmasByInstrutor';
-import getInscritosByTurma from './actions/getInscritosByTurma';
 import confirmarInscricao from './actions/confirmarInscricao';
 import criarTurma from './actions/criarTurma';
+import editarTurma from './actions/editarTurma';
+import getInscritosByTurma from './actions/getInscritosByTurma';
 import getTurmaById from './actions/getTurmaById';
+import getTurmasByInstrutor from './actions/getTurmasByInstrutor';
+
 
 
 export const turmasReducer = combineReducers({
     list: getTurmasByInstrutor,
     inscritos: getInscritosByTurma,
     criar: criarTurma,
+    editar: editarTurma,
     confirmarInscrito: confirmarInscricao,
     unique: getTurmaById
 });

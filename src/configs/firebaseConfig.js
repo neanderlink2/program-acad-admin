@@ -35,6 +35,8 @@ firebaseAppAuth.onIdTokenChanged(
                 .then(result => {
                     store.dispatch(storeUser({ user: user, token: result.token }));
                 })
+        } else {
+            store.dispatch(storeUser({ user: undefined, token: '' }));
         }
     },
     (error) => {

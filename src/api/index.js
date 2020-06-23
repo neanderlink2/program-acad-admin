@@ -1,14 +1,12 @@
-import axios, { AxiosError } from 'axios';
-import store from '../configs/middlewares';
+import axios from 'axios';
 import { signOut } from '../configs/firebaseConfig';
+import store from '../configs/middlewares';
 
 const api = axios.create({
     baseURL: process.env.NODE_ENV === 'production' ?
-        'https://programacadapipresentation20200109114653.azurewebsites.net/api'
+        'https://program-acad-api.azurewebsites.net/api'
         :
         'http://localhost:9000/api'
-    //'http://localhost:63857/api'
-    //'https://programacadapipresentation20200109114653.azurewebsites.net/api'
 });
 
 api.interceptors.request.use(async config => {

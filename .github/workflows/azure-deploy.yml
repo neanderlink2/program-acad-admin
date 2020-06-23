@@ -23,7 +23,8 @@ env:
   AZURE_WEBAPP_NAME: program-acad-admin    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: './build'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '12.x'                # set this to the node version to use
-
+  CI: false 
+  
 jobs:
   build-and-deploy:
     name: Build e Deploy para o Azure
@@ -40,7 +41,6 @@ jobs:
         # deploy to Azure Web App.
         npm install
         CI=false npm run build --if-present
-        npm run test --if-present
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:

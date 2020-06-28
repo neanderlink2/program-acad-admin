@@ -1,4 +1,4 @@
-import { Typography, Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 
 export const TituloTopo = styled(Typography)({

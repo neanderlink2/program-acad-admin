@@ -13,7 +13,8 @@ const Header = () => {
     const history = useHistory();
     const { user, userClaims } = useUserLogin();
     const width = useWindowWidth();
-    const { showMenu } = useAsideMenu();
+    const { showMenu } = useAsideMenu();  
+    
     return (
         <AppBar>
             <Toolbar>

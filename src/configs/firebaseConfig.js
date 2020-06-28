@@ -3,7 +3,7 @@ import 'firebase/auth';
 import 'firebase/storage';
 import { toast } from 'react-toastify';
 import { removeUser, storeUser } from '../modules/account/actions/authHandler';
-import store from './middlewares';
+import store, { history } from './middlewares';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDUlqW3Y4a0Gaz2TNgYQrEmS5PT6-4qLNY",
@@ -35,12 +35,18 @@ firebaseAppAuth.onIdTokenChanged(
                 .then(result => {
                     store.dispatch(storeUser({ user: user, token: result.token }));
                 })
+                .catch(() => {
+                    console.log('DEU ERRO NO AUTH');
+                    store.dispatch(removeUser());
+                    history.push('/login');
+                })
         } else {
             store.dispatch(storeUser({ user: undefined, token: '' }));
         }
     },
     (error) => {
-
+        console.log('DEU ERRO NO AUTH');
+        store.dispatch(removeUser());
     }
 );
 
@@ -75,7 +81,7 @@ export const signInWithSimple = async (email, password) => {
         return response;
     } catch (error) {
         handleAuthError(error.code);
-        return response;
+        return error;
     }
 }
 

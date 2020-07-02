@@ -42,11 +42,11 @@ export const TurmaForm = () => {
             if (formData) {
                 await turmaFormSchema.validate(formData, { abortEarly: false });
             }
-
+            
             const imagemRef = formRef.current.getFieldRef('imagem');
 
             if ((!imagemRef.files || imagemRef.files.length <= 0) && !editandoTurma) {
-                toast.warn("Selecione uma imagem");
+                toast.warn("Selecione uma imagem.");
                 return;
             }
 

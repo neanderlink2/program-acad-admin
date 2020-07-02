@@ -16,7 +16,7 @@ export const ImageUpload = ({ inputName, defaultImage, ...rest }) => {
                 type="file"
                 accept="image/*"
                 style={{ display: 'none' }}
-                onChange={({ target }) => {                    
+                onChange={({ target }) => {
                     const files = target.files;
                     const url = URL.createObjectURL(files[0]);
                     imageRef.current.src = url;

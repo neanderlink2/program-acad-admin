@@ -38,6 +38,9 @@ export const TabAlgoritmos = () => {
                         onEditClick={() => {
                             history.push(`/turma/${idTurma}/algoritmo/${algoritmo.id}`);
                         }}
+                        onListClick={() => {
+                            history.push(`/turma/${idTurma}/algoritmo/${algoritmo.id}/usuarios-concluiram`);
+                        }}
                     />
                 )}
             />

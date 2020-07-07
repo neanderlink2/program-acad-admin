@@ -3,10 +3,10 @@ import createAlgoritmo from './actions/createAlgoritmo';
 import editAlgoritmo from './actions/editAlgoritmo';
 import getAlgoritmoPorId from './actions/getAlgoritmoPorId';
 import getAlgoritmos from './actions/getAlgoritmos';
+import getAlgoritmosConcluidosPorTurma from './actions/getAlgoritmosConcluidosPorTurma';
 import getLinguagensDisponiveis from './actions/getLinguagensDisponiveis';
 import getNiveisDificuldade from './actions/getNiveisDificuldade';
 import getTestesPorAlgoritmo from './actions/getTestesPorAlgoritmo';
-
 
 export const algoritmosReducer = combineReducers({
     list: getAlgoritmos,
@@ -15,5 +15,6 @@ export const algoritmosReducer = combineReducers({
     niveis: getNiveisDificuldade,
     linguagens: getLinguagensDisponiveis,
     unique: getAlgoritmoPorId,
-    testes: getTestesPorAlgoritmo
+    testes: getTestesPorAlgoritmo,
+    usuariosConcluiram: getAlgoritmosConcluidosPorTurma
 });

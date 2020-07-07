@@ -3,6 +3,7 @@ import { HomeScreen } from '../pages/home';
 import LoginScreen from '../pages/login';
 import { TurmaForm } from '../pages/nova-turma';
 import { NovoAlgoritmoScreen } from '../pages/novo-algoritmo';
+import UsuarioConcluiramScreen from '../pages/usuarios-concluiram';
 
 export const routes = [
     {
@@ -33,6 +34,12 @@ export const routes = [
         path: '/turma/:idTurma/algoritmo/:idAlgoritmo',
         component: NovoAlgoritmoScreen,
         title: 'Algoritmo',
+        onlyAuthenticated: true
+    },
+    {
+        path: '/turma/:idTurma/algoritmo/:idAlgoritmo/usuarios-concluiram',
+        component: UsuarioConcluiramScreen,
+        title: 'Relatório de resolução do algoritmo',
         onlyAuthenticated: true
     },
     {

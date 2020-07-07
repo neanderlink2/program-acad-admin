@@ -4,6 +4,7 @@ import { createAlgoritmoFalha, createAlgoritmoRequest, createAlgoritmoSucesso } 
 import { editAlgoritmoFalha, editAlgoritmoRequest, editAlgoritmoSucesso } from './actions/editAlgoritmo';
 import { getAlgoritmoPorIdFalha, getAlgoritmoPorIdRequest, getAlgoritmoPorIdSucesso } from './actions/getAlgoritmoPorId';
 import { getAlgoritmosFalha, getAlgoritmosRequest, getAlgoritmosSucesso } from './actions/getAlgoritmos';
+import { getAlgoritmosConcluidosPorTurmaFalha, getAlgoritmosConcluidosPorTurmaRequest, getAlgoritmosConcluidosPorTurmaSucesso } from './actions/getAlgoritmosConcluidosPorTurma';
 import { getLinguagensDisponiveisFalha, getLinguagensDisponiveisRequest, getLinguagensDisponiveisSucesso } from './actions/getLinguagensDisponiveis';
 import { getNiveisDificuldadeFalha, getNiveisDificuldadeRequest, getNiveisDificuldadeSucesso } from './actions/getNiveisDificuldade';
 import { getTestesPorAlgoritmoFalha, getTestesPorAlgoritmoRequest, getTestesPorAlgoritmoSucesso } from './actions/getTestesPorAlgoritmo';
@@ -94,6 +95,16 @@ function* obterTestesPorAlgoritmo({ payload }) {
     }
 }
 
+function* obterUsuarioConcluiramAlgoritmo({ payload }) {
+    try {
+        const response = yield call(getRequest, `/v1/algoritmos/${payload}/concluidos`);
+        const { data } = response;
+        yield put(getAlgoritmosConcluidosPorTurmaSucesso(data));
+    } catch (error) {
+        yield put(getAlgoritmosConcluidosPorTurmaFalha(formatErrors(error)));
+    }
+}
+
 export default all([
     takeLeading(getAlgoritmosRequest.type, obterAlgoritmosPaged),
     takeLeading(createAlgoritmoRequest.type, criarAlgoritmo),
@@ -101,5 +112,6 @@ export default all([
     takeLeading(getNiveisDificuldadeRequest.type, obterNiveisDificuldade),
     takeLeading(getAlgoritmoPorIdRequest.type, obterAlgoritmoPorId),
     takeLeading(getTestesPorAlgoritmoRequest.type, obterTestesPorAlgoritmo),
+    takeLeading(getAlgoritmosConcluidosPorTurmaRequest.type, obterUsuarioConcluiramAlgoritmo),
     takeLeading(editAlgoritmoRequest.type, editarAlgoritmo),
 ]);

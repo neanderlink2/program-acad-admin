@@ -5,6 +5,7 @@ import { createAlgoritmoRequest } from "./actions/createAlgoritmo";
 import { editAlgoritmoRequest } from "./actions/editAlgoritmo";
 import { getAlgoritmoPorIdRequest, getAlgoritmoPorIdSucesso } from "./actions/getAlgoritmoPorId";
 import { getAlgoritmosRequest } from "./actions/getAlgoritmos";
+import { getAlgoritmosConcluidosPorTurmaRequest, getAlgoritmosConcluidosPorTurmaSucesso } from "./actions/getAlgoritmosConcluidosPorTurma";
 import { getLinguagensDisponiveisRequest } from "./actions/getLinguagensDisponiveis";
 import { getNiveisDificuldadeRequest } from "./actions/getNiveisDificuldade";
 import { getTestesPorAlgoritmoRequest } from "./actions/getTestesPorAlgoritmo";
@@ -129,4 +130,23 @@ export const useTestesPorAlgoritmo = () => {
     }, [dispatch]);
 
     return [testes, isLoading, buscarTestes];
+}
+
+export const useUsuariosConcluiramAlgoritmo = () => {
+    const dispatch = useDispatch();
+
+    const { usuarioConcluiram, isLoading } = useSelector(state => ({
+        usuarioConcluiram: state.algoritmos.usuariosConcluiram.successPayload,
+        isLoading: state.algoritmos.usuariosConcluiram.isRequesting
+    }));
+
+    const buscarUsuariosConcluiramPorId = useCallback((idAlgoritmo) => {
+        dispatch(getAlgoritmosConcluidosPorTurmaRequest(idAlgoritmo));
+    }, [dispatch]);
+
+    const limparUsuariosConcluiram = useCallback(() => {
+        dispatch(getAlgoritmosConcluidosPorTurmaSucesso(undefined));
+    }, [dispatch]);
+
+    return [usuarioConcluiram, isLoading, buscarUsuariosConcluiramPorId, limparUsuariosConcluiram];
 }

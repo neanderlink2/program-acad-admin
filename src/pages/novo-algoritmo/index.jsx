@@ -30,7 +30,8 @@ export const NovoAlgoritmoScreen = () => {
 
     const { isLoading: isCreatingAlgoritmo, criarAlgoritmo, editarAlgoritmo } = useCriarAlgoritmo();
     const [algoritmo, isLoadingAlgoritmo, buscarAlgoritmo, limparAlgoritmo] = useAlgoritmoPorId();
-    const [casosTesteAlgoritmo, isLoadingTestes, buscarTestes] = useTestesPorAlgoritmo();
+    const [casosTesteAlgoritmo, isLoadingTestes, buscarTestes] = useTestesPorAlgoritmo();    
+
     const editandoAlgoritmo = useMemo(
         () => !!idAlgoritmo,
         [idAlgoritmo]);

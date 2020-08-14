@@ -2,12 +2,14 @@ import axios from 'axios';
 import { signOut } from '../configs/firebaseConfig';
 import store from '../configs/middlewares';
 
+export const URL_BASE_API = process.env.NODE_ENV === 'production' ?
+    'https://program-acad-api.azurewebsites.net/api'
+    :
+    //'https://program-acad-api.azurewebsites.net/api'
+    'http://localhost:9000/api';
+
 const api = axios.create({
-    baseURL: process.env.NODE_ENV === 'production' ?
-        'https://program-acad-api.azurewebsites.net/api'
-        :
-        //'https://program-acad-api.azurewebsites.net/api'
-        'http://localhost:9000/api'
+    baseURL: URL_BASE_API
 });
 
 api.interceptors.request.use(async config => {
@@ -56,3 +58,5 @@ export const formatErrors = (error) => {
     }
     return [];
 };
+
+export default api;

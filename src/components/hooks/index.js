@@ -2,6 +2,8 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import useSWR, { mutate } from 'swr';
+import api from '../../api';
 import { storeUser } from '../../modules/account/actions/authHandler';
 
 export const useDocumentTitle = (title) => {
@@ -66,4 +68,19 @@ export const useUserLogin = () => {
 
 export const useQuery = () => {
     return new URLSearchParams(useLocation().search);
+}
+
+export function useFetch(url, params = []) {
+    const { data, error } = useSWR([url, ...params], async (url, ...args) => {
+        try {
+            const response = await api.request({ url, params: args });
+            return response.data;
+        } catch (error) {
+            console.error("ERRO NA REQUISIÇÃO: ", error);
+            throw Error(error);
+        }
+    }
+    );
+
+    return { response: data, error, isLoading: !data, reload: () => mutate(url) };
 }

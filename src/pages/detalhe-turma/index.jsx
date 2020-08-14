@@ -1,5 +1,5 @@
 import { Container, Fab, Tab, Tabs, Typography } from '@material-ui/core';
-import { Assignment, Edit, People } from '@material-ui/icons';
+import { Assignment, Casino, Edit, People } from '@material-ui/icons';
 import { format, parse } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { useTurmaById } from '../../modules/turmas/hooks';
 import { ContainerDadosTurma, DadosWrapper, FotoTurma, LinhaDadosInferior } from './styles';
 import { TabAlgoritmos } from './tab-algoritmos';
 import { TabUsuariosInscritos } from './tab-inscritos';
+import TabPontuacao from './tab-pontuacao';
 
 export const DetalheTurmaScreen = () => {
     const { idTurma } = useParams();
@@ -56,12 +57,16 @@ export const DetalheTurmaScreen = () => {
             <Tabs value={tabIndex} onChange={(evt, newValue) => setTabIndex(newValue)}>
                 <Tab icon={<Assignment />} label="Algoritmos" {...tabPanelProps(0)} />
                 <Tab icon={<People />} label="Usuários inscritos" {...tabPanelProps(1)} />
+                <Tab icon={<Casino />} label="Pontuação da turma" {...tabPanelProps(2)} />
             </Tabs>
             <TabPanel value={tabIndex} index={0}>
                 <TabAlgoritmos />
             </TabPanel>
             <TabPanel value={tabIndex} index={1}>
                 <TabUsuariosInscritos />
+            </TabPanel>
+            <TabPanel value={tabIndex} index={2}>
+                <TabPontuacao />
             </TabPanel>
         </Container>
     )
